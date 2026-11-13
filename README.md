@@ -38,6 +38,20 @@ curl -H "API-Version: v2" -H "Accept-Language: en" -H "Accept: application/json"
 **Do not run `docker compose down`** while offline. It deletes the container and its
 loaded data. The next `up` would need internet again. Use `stop` and `start` instead.
 
+## Vercel deployment (`vercel/`)
+
+Live at https://icd-api-one.vercel.app (Vercel project `icd-api`, Container preset, beta).
+
+- `vercel/Dockerfile` builds on `whoicd/icd-api`. During the build, `preload.sh` starts the API once
+  so the ICD-11 data is downloaded and indexed into `/usr/share/icdapi/icddata` (set via `TMPDIR`).
+  The data ends up inside the image, so new instances don't download it again.
+- `vercel/start.sh` replaces WHO's start script. It skips sshd and listens on `$PORT`.
+- Vercel stops idle instances after about 5 minutes. The next request then waits about 50 seconds while the container starts.
+- To change release or languages, edit `include` in the Dockerfile and redeploy.
+- Redeploy: `cd vercel; npx vercel@latest deploy --prod`
+- The production URL is **public with no auth**. Restrict it in Vercel → Project → Settings →
+  Deployment Protection if needed.
+
 ## Updating
 
 With internet: `docker compose pull`, then `docker compose up -d --force-recreate`.
