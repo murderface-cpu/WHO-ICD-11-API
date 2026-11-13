@@ -1,4 +1,4 @@
-# WHO ICD-11 API — local offline container
+# WHO ICD-11 API - local offline container
 
 Runs the official `whoicd/icd-api` Docker image locally. It needs internet only
 when the container is first created (to pull the image and load ICD-11 data). After
