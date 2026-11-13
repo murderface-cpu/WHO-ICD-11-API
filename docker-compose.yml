@@ -1,0 +1,13 @@
+services:
+  icd-api:
+    image: whoicd/icd-api:latest
+    container_name: icd-api
+    ports:
+      - "${ICD_PORT:-8382}:80"
+    environment:
+      acceptLicense: "true"                     # required: accepts the WHO ICD-API license
+      saveAnalytics: "${ICD_SAVE_ANALYTICS:-false}"  # false = nothing is sent to WHO
+      include: "${ICD_INCLUDE:-2026-01_en}"     # <release>_<lang>[-lang...] , comma-separate releases
+      enableDoris: "${ICD_ENABLE_DORIS:-false}"
+      fhirSupport: "${ICD_FHIR_SUPPORT:-false}"
+    restart: unless-stopped
